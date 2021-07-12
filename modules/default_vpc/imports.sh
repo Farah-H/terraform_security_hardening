@@ -11,4 +11,6 @@ terraform import module.delete_default_vpc.aws_subnet.default_6 subnet-1044d168
 
 # import igw
 terraform import module.delete_default_vpc.aws_internet_gateway.default igw-10533e69
+
 #terraform apply -auto-approve
+terraform import module.cloudtrail_logging.aws_kms_key.bucket_key $KMS_KEY

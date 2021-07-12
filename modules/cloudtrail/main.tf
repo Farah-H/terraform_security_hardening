@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+
+
 # for now we are importing an existing key 
 # this key enables encrption/decryption of logs
 resource "aws_kms_key" "bucket_key" {
@@ -8,13 +11,11 @@ resource "aws_kms_key" "bucket_key" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_logs" {
-    bucket = "cloudtrail_logs"
+    bucket = "cloudtrail-logs-1"
     acl = "log-delivery-write" 
 
-    logging {
-        # logging to own bucket doesn't work
-        target_bucket = aws_s3_bucket.cloudtrail_bucket_logs.id
-    }
+    #hoping this will fix naming bugs
+    force_destroy = true
 
     server_side_encryption_configuration {
         rule {
@@ -31,52 +32,63 @@ resource "aws_s3_bucket" "cloudtrail_logs" {
         enabled = true
     }
 
-    expiration {
-        days = 2190
-    }
-}
-
-# there is probably a better way to do this 
-# this bucket exists so that cloudtrail bucket logs can be sent here
-# the plan is to route these logs back into the cloudtrail bucket somehow
-resource "aws_s3_bucket" "cloudtrail_bucket_logs" {
-    bucket = "cloudtrail_bucket_logs"
-    acl = "log-delivery-write"
-    logging {
-        target_bucket = aws_s3_bucket.cloudtrail_logs.id
-    }
-
-    server_side_encryption_configuration {
-        rule {
-            apply_server_side_encryption_by_default {
-                kms_master_key_id = aws_kms_key.bucket_key.arn
-                sse_algorithm = "aws:kms"
-            }
+    # copying this from documantation in the hope that it fixes some bugs
+    policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AWSCloudTrailAclCheck20150319",
+            "Effect": "Allow",
+            "Principal": {"Service": "cloudtrail.amazonaws.com"},
+            "Action": "s3:GetBucketAcl",
+            "Resource": "arn:aws:s3:::cloudtrail-logs-1"
+        },
+        {
+            "Sid": "AWSCloudTrailWrite20150319",
+            "Effect": "Allow",
+            "Principal": {"Service": "cloudtrail.amazonaws.com"},
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::cloudtrail-logs-1/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+            "Condition": {"StringEquals": {"s3:x-amz-acl": "bucket-owner-full-control"}}
         }
-    }
-
-    versioning {
-        enabled = true 
-    }
-
-    expiration {
-        days = 2190
-    }
+    ]
+}
+POLICY
 }
 
-resource "aws_cloudtrail" "cloudtrail_logging" {
-    name = "cloudtrail_logging" 
-    s3_bucket_name = aws_s3_bucket.cloudtrail_logs.id
-    include_global_service_events = true
-    enable_log_file_validation = true 
-    is_multi_region_trail = true 
-    is_organisation_trail = true
-    kms_key_id = aws_kms_key.bucket_key.arn
 
+# data "aws_s3_bucket" "cloudtrail_logs"  {
+#     bucket = aws_s3_bucket.cloudtrail_logs.id
+# }
 
-    # events to track 
-    event_selector {
-        include_management_events = true 
-    }
+# resource "aws_cloudtrail" "cloudtrail_logging" {
+#     name = "cloudtrail_logging" 
+#     s3_bucket_name = aws_s3_bucket.cloudtrail_logs.id
+#     s3_key_prefix = ""
 
-}
+#     include_global_service_events = true
+#     enable_log_file_validation = true 
+    
+#     # commenting this out, might fix some bugs
+#     #is_multi_region_trail = true 
+
+#     # testing on personal account, so commenting this out
+#     # is_organization_trail = true
+#     kms_key_id = aws_kms_key.bucket_key.arn
+ 
+
+#     # track cloudtrail-logs bucket
+#     event_selector {
+#         include_management_events = true 
+#         read_write_type = "All"
+
+#         data_resource {
+#             type = "AWS::S3::cloudtrail-logs*"
+#             values = ["${data.aws_s3_bucket.cloudtrail_logs.arn}/"]
+#         }
+#     }
+
+#     # link to cloudwatch here 
+
+# }
