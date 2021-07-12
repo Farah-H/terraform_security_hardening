@@ -25,5 +25,9 @@
     - "`enable_log_file_validation` - (Optional) Whether log file integrity validation is enabled. Defaults to `false`."
     - it seems requirements number 2 and 8 are identical? 
 - bucket policy error, using [the follwing policy](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html) from AWS docs
-- bucket name errors, when i try to use bucket_prefix it breaks the bucket policy. 
-    - trying to resolve by creating a seperate bucket policy and applying it to the bucket
+- bucket name errors, when I try to use bucket_prefix it breaks the bucket policy. 
+    - resolved by creating a seperate bucket policy and applying it to the bucket
+- created a vpc (this is a management event) to test if cloudtrail link works:
+    - cloudtrail successfully detected the event and logged it, the log is stored in the correct file and encrypted! 
+    - ![cloudtrail_1](./../../images/cloudtrail_1.png)
+    - ![cloudtrail_2](./../../images/cloudtrail_2.png)

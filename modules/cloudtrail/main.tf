@@ -55,37 +55,38 @@ resource "aws_s3_bucket_policy" "cloudtrail_logs_bucket_policy" {
 POLICY
 }
 
-# data "aws_s3_bucket" "cloudtrail_logs"  {
-#     bucket = aws_s3_bucket.cloudtrail_logs.id
-# }
+data "aws_s3_bucket" "cloudtrail_logs"  {
+    bucket = aws_s3_bucket.cloudtrail_logs.id
+}
 
-# resource "aws_cloudtrail" "cloudtrail_logging" {
-#     name = "cloudtrail_logging" 
-#     s3_bucket_name = aws_s3_bucket.cloudtrail_logs.id
-#     s3_key_prefix = ""
+resource "aws_cloudtrail" "cloudtrail_logging" {
+    name = "cloudtrail_logging" 
+    s3_bucket_name = aws_s3_bucket.cloudtrail_logs.id
+    s3_key_prefix = ""
 
-#     include_global_service_events = true
-#     enable_log_file_validation = true 
+    include_global_service_events = true
+    enable_log_file_validation = true 
     
-#     # commenting this out, might fix some bugs
-#     #is_multi_region_trail = true 
+    # commenting this out, might fix some bugs
+    #is_multi_region_trail = true 
 
-#     # testing on personal account, so commenting this out
-#     # is_organization_trail = true
-#     kms_key_id = aws_kms_key.bucket_key.arn
+    # testing on personal account, so commenting this out
+    # is_organization_trail = true
+
+    # kms_key_id = aws_kms_key.bucket_key.id
  
 
-#     # track cloudtrail-logs bucket
-#     event_selector {
-#         include_management_events = true 
-#         read_write_type = "All"
+    # track cloudtrail-logs bucket
+    event_selector {
+        include_management_events = true 
+        read_write_type = "All"
 
-#         data_resource {
-#             type = "AWS::S3::cloudtrail-logs*"
-#             values = ["${data.aws_s3_bucket.cloudtrail_logs.arn}/"]
-#         }
-#     }
+        data_resource {
+            type = "AWS::S3::Object"
+            values = ["${data.aws_s3_bucket.cloudtrail_logs.arn}/"]
+        }
+    }
 
-#     # link to cloudwatch here 
-
-# }
+    # # link to cloudwatch here 
+    # cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudwatch_logs.arn}:*"
+}
