@@ -3,18 +3,13 @@ data "aws_caller_identity" "current" {}
 
 # for now we are importing an existing key 
 # this key enables encrption/decryption of logs
-resource "aws_kms_key" "bucket_key" {
-    description = "key for cloudtrail logs bucket"
-
-    # policy here, by default key has all permissions if a policy is not defined 
-    # a policy was already defined when I created the key in console.
-}
+resource "aws_kms_key" "bucket_key" {}
 
 resource "aws_s3_bucket" "cloudtrail_logs" {
-    bucket = "cloudtrail-logs-1"
+    bucket_prefix = "cloudtrail-logs"
     acl = "log-delivery-write" 
 
-    #hoping this will fix naming bugs
+    # this allows terraform destroy
     force_destroy = true
 
     server_side_encryption_configuration {
@@ -31,32 +26,34 @@ resource "aws_s3_bucket" "cloudtrail_logs" {
     versioning {
         enabled = true
     }
+}
 
-    # copying this from documantation in the hope that it fixes some bugs
+resource "aws_s3_bucket_policy" "cloudtrail_logs_bucket_policy" {
+    bucket = aws_s3_bucket.cloudtrail_logs.id
+
     policy = <<POLICY
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AWSCloudTrailAclCheck20150319",
-            "Effect": "Allow",
-            "Principal": {"Service": "cloudtrail.amazonaws.com"},
-            "Action": "s3:GetBucketAcl",
-            "Resource": "arn:aws:s3:::cloudtrail-logs-1"
-        },
-        {
-            "Sid": "AWSCloudTrailWrite20150319",
-            "Effect": "Allow",
-            "Principal": {"Service": "cloudtrail.amazonaws.com"},
-            "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::cloudtrail-logs-1/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
-            "Condition": {"StringEquals": {"s3:x-amz-acl": "bucket-owner-full-control"}}
-        }
-    ]
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "AWSCloudTrailAclCheck20150319",
+                "Effect": "Allow",
+                "Principal": {"Service": "cloudtrail.amazonaws.com"},
+                "Action": "s3:GetBucketAcl",
+                "Resource": "arn:aws:s3:::${aws_s3_bucket.cloudtrail_logs.id}"
+            },
+            {
+                "Sid": "AWSCloudTrailWrite20150319",
+                "Effect": "Allow",
+                "Principal": {"Service": "cloudtrail.amazonaws.com"},
+                "Action": "s3:PutObject",
+                "Resource": "arn:aws:s3:::${aws_s3_bucket.cloudtrail_logs.id}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+                "Condition": {"StringEquals": {"s3:x-amz-acl": "bucket-owner-full-control"}}
+            }
+        ]
 }
 POLICY
 }
-
 
 # data "aws_s3_bucket" "cloudtrail_logs"  {
 #     bucket = aws_s3_bucket.cloudtrail_logs.id

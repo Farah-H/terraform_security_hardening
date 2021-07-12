@@ -11,7 +11,7 @@
 # Notes:
 - Create s3 private bucket 
 - logging to own bucket doesn't work, can create another bucket to save logs to and add those logs to the cloudtrail bucket? 
-    - used `event_selector` to achieve this
+    - used `event_selector` to enable logging for the bucket
 - created kms cmk in the console, which can be imported into our config and used to encrypt/decrypt logs. 
 - bucket permissions may cause issues later, `private` vs `log-delivery-write`
     - private = owner has FULL_CONTROL permissions
@@ -26,3 +26,4 @@
     - it seems requirements number 2 and 8 are identical? 
 - bucket policy error, using [the follwing policy](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-s3-bucket-policy-for-cloudtrail.html) from AWS docs
 - bucket name errors, when i try to use bucket_prefix it breaks the bucket policy. 
+    - trying to resolve by creating a seperate bucket policy and applying it to the bucket
