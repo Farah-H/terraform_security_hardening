@@ -1,9 +1,9 @@
 # AWS Security Hardening using Terraform
 This repository contains a terraform and python script that, when run against an existing AWS account:
-    1. Deletes the default VPC and associated infrastructure
-    2. Creates a private s3 bucket to contain CloudTrail logs
-    3. Creates a CloudTrail to track all global and management events, including access to the above bucket. 
-    4. In every region. 
+1. Deletes the default VPC and associated infrastructure
+2. Creates a private s3 bucket to contain CloudTrail logs
+3. Creates a CloudTrail to track all global and management events, including access to the above bucket. 
+4. In every region. 
 
 Please refer to the README.mds in the `modules` directories for more details / context / notes and specifically which requirements were met and how this was done. 
 
