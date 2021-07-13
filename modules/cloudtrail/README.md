@@ -1,5 +1,5 @@
 # Requirements:
-1. Enable CloudTrail in all regions (done)
+1. Enable CloudTrail in all regions
 2. Enable CloudTrail log validation (done)
 3. All management and global events are captured within CloudTrail (done)
 4. Store CloudTrail logs are stored in a private s3 bucket (done)
@@ -31,3 +31,6 @@
     - cloudtrail successfully detected the event and logged it, the log is stored in the correct file and encrypted! 
     - ![cloudtrail_1](./../../images/cloudtrail_1.png)
     - ![cloudtrail_2](./../../images/cloudtrail_2.png)
+- I opened the folders in the `cloudwatch-logs` bucket and downloaded a file, these actions was logged as well: 
+    - ![](./../../images/cloudtrail_bucket_access.png)
+- `CloudTrail-Digest/` directory is present which indicates that the log file integrity validation is working. 

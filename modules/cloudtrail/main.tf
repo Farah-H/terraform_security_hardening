@@ -1,8 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-
-# for now we are importing an existing key 
-# this key enables encrption/decryption of logs
 resource "aws_kms_key" "bucket_key" {}
 
 resource "aws_s3_bucket" "cloudtrail_logs" {
@@ -73,7 +70,7 @@ resource "aws_cloudtrail" "cloudtrail_logging" {
     # testing on personal account, so commenting this out
     # is_organization_trail = true
 
-    # kms_key_id = aws_kms_key.bucket_key.id
+    #kms_key_id = aws_kms_key.bucket_key.arn
  
 
     # track cloudtrail-logs bucket
@@ -87,6 +84,6 @@ resource "aws_cloudtrail" "cloudtrail_logging" {
         }
     }
 
-    # # link to cloudwatch here 
-    # cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudwatch_logs.arn}:*"
+    # link to cloudwatch here 
+    cloud_watch_logs_group_arn = "${var.cloudwatch_log_group}:*"
 }
