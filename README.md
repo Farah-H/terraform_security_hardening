@@ -1,12 +1,21 @@
 # AWS Security Hardening using Terraform
 
 ## Pre-requisites
-- An AWS account with valid credentials (access keys)
+- An AWS account:
+    -  with valid credentials (access keys) and permissions to perform global actions
+    - All regions enabled (this can be checked using the console)
 - Terraform v1.0.2 or later
 - Python v3.6 or later
 - Boto3 v.1.17 or later
+    - if `pip install boto3` doesn't work or you get a 'no module called boto3' error try: 
+        ```bash
+        python3 -m pip install --user boto3
+        ```
 - A Unix or Bash terminal 
 
+**DISCLAIMER: This script is intended for use on newly created AWS accounts, which ONLY contain the default vpc, for older accounts this will cause issues as it may delete other vpcs too**. This may be resolved in future releases, but for now please only use this code on fresh AWS accounts. 
+
+## How to run this code:
 ```bash
 export AWS_ACCESS_KEY_ID="your_aws_key_id"
 export AWS_SECRET_ACCESS_KEY="your_aws_key"
