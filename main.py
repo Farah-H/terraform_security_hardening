@@ -60,5 +60,16 @@ for region in aws_regions:
             print(igw_id)
     
     # now we will use bash in python to carry out the terraform commands 
-    # first imports: 
+
+    # defining provider region
+    subprocess.run(f"export TF_VAR_region={region}")
+
+    # importing vpc
+    subprocess.run(f"terraform import module.delete_default_vpc.aws_vpc.default {vpc_id}")
     
+    # importing subnets
+    for i in range(len(subnet_ids)):
+        subprocess.run(f"terraform import module.delete_default_vpc.aws_subnet.default_{i} {subnet_ids[i]}")
+
+    # importing igw
+    subprocess.run(f"terraform import module.delete_default_vpc.aws_internet_gateway.default {igw_id}")

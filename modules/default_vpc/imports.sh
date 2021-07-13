@@ -1,5 +1,5 @@
 # import vpc
-terraform import module.delete_default_vpc.aws_vpc.default vpc-2ce2da54
+terraform import module.delete_default_vpc.aws_vpc.default vpc-ae4e2dd3
 
 # import subnets
 terraform import module.delete_default_vpc.aws_subnet.default_1 subnet-5e465975
