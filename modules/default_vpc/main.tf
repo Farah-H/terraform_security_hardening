@@ -15,6 +15,12 @@ resource "aws_vpc" "default" {
 }
 
 
+resource "aws_subnet" "default_0" {
+    count = 0
+    vpc_id = aws_vpc.default[0].id
+    cidr_block = var.subnets_cidr
+}
+
 resource "aws_subnet" "default_1" {
     count = 0
     vpc_id = aws_vpc.default[0].id
@@ -40,12 +46,6 @@ resource "aws_subnet" "default_4" {
 }
 
 resource "aws_subnet" "default_5" {
-    count = 0
-    vpc_id = aws_vpc.default[0].id
-    cidr_block = var.subnets_cidr
-}
-
-resource "aws_subnet" "default_6" {
     count = 0
     vpc_id = aws_vpc.default[0].id
     cidr_block = var.subnets_cidr

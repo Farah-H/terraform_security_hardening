@@ -10,14 +10,14 @@ module "delete_default_vpc" {
     subnets_cidr = var.subnets_cidr
 }
 
-module "cloudwatch_alarms" {
-    source = "./modules/cloudwatch"
+# module "cloudwatch_alarms" {
+#     source = "./modules/cloudwatch"
 
-    kms_key = module.cloudtrail_logging.kms_key
-}
+#     kms_key = module.cloudtrail_logging.kms_key
+# }
 
 module "cloudtrail_logging" {
     source = "./modules/cloudtrail"
-    cloudwatch_log_group = module.cloudwatch_alarms.cloudwatch_log_group
+    # cloudwatch_log_group = module.cloudwatch_alarms.cloudwatch_log_group
 }
 

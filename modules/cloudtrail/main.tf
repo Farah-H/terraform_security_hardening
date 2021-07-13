@@ -65,7 +65,7 @@ resource "aws_cloudtrail" "cloudtrail_logging" {
     enable_log_file_validation = true 
     
     # commenting this out, might fix some bugs
-    #is_multi_region_trail = true 
+    is_multi_region_trail = true 
 
     # testing on personal account, so commenting this out
     # is_organization_trail = true
@@ -84,6 +84,6 @@ resource "aws_cloudtrail" "cloudtrail_logging" {
         }
     }
 
-    # link to cloudwatch here 
-    cloud_watch_logs_group_arn = "${var.cloudwatch_log_group}:*"
+    # # link to cloudwatch here 
+    # cloud_watch_logs_group_arn = "${var.cloudwatch_log_group}:*"
 }

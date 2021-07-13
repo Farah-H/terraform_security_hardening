@@ -1,1 +1,1 @@
-variable "cloudwatch_log_group" {}
+# variable "cloudwatch_log_group" {}
