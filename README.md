@@ -13,7 +13,6 @@
         ```
 - A Unix or Bash terminal 
 
-**DISCLAIMER: This script is intended for use on newly created AWS accounts, which ONLY contain the default vpc, for older accounts this will cause issues as it may delete other vpcs too**. This may be resolved in future releases, but for now please only use this code on fresh AWS accounts. 
 
 ## How to run this code:
 ```bash

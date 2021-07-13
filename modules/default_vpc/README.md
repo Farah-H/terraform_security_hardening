@@ -27,5 +27,7 @@ After creating a new IAM user, named 'test_2', in the AWS Consule. I logged on a
 - Moved terraform script into the default_vpc directory, create python script to loop through regions, can use `boto3` to get vpc_ids, subnet_ids, subnet_cidr and igw_id
 - tried to condense subnet resources into one with `count` but didn't work because then it requires `terraform destroy` to delete the subnet. 
 - look up terraform `where` clause to explicitly delete subnets / vpc where it's the default, as opposed to filtering in python. 
+    - done in boto3 
 - test whether subnet cidr is necessary or if can be left blank (`"0.0.0.0/0"`)
     - if it doesn't need to be correct, it makes the python script much easier
+- boto3 succesfully used to get a list of all vpcs, subnets and igws. 
