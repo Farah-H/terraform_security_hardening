@@ -31,3 +31,6 @@ After creating a new IAM user, named 'test_2', in the AWS Consule. I logged on a
 - test whether subnet cidr is necessary or if can be left blank (`"0.0.0.0/0"`)
     - if it doesn't need to be correct, it makes the python script much easier
 - boto3 succesfully used to get a list of all vpcs, subnets and igws. 
+    - ![boto_list](./../../images/boto3_list.png)
+- script run to delete all default vpcs (the VPC in oregon is one I created manually)
+    - ![vpcs_regions](./../../images/vpcs_regions.png)

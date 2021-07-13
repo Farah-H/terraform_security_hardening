@@ -1,16 +1,17 @@
+export TF_VAR_region="your-selected-region"
+
 # import vpc
-terraform import module.delete_default_vpc.aws_vpc.default vpc-ae4e2dd3
+terraform import module.delete_default_vpc.aws_vpc.default "your-vpc-id"
 
 # import subnets
-terraform import module.delete_default_vpc.aws_subnet.default_1 subnet-5e465975
-terraform import module.delete_default_vpc.aws_subnet.default_2 subnet-c6bf098c
-terraform import module.delete_default_vpc.aws_subnet.default_3 subnet-ebf99db6
-terraform import module.delete_default_vpc.aws_subnet.default_4 subnet-1044d168
-terraform import module.delete_default_vpc.aws_subnet.default_5 subnet-1044d168
-terraform import module.delete_default_vpc.aws_subnet.default_6 subnet-1044d168
+terraform import module.delete_default_vpc.aws_subnet.default_1 "your-subnet-ids"
+# terraform import module.delete_default_vpc.aws_subnet.default_2 "your-subnet-ids"
+# terraform import module.delete_default_vpc.aws_subnet.default_3 "your-subnet-ids"
+# terraform import module.delete_default_vpc.aws_subnet.default_4 "your-subnet-ids"
+# terraform import module.delete_default_vpc.aws_subnet.default_5 "your-subnet-ids"
+# terraform import module.delete_default_vpc.aws_subnet.default_6 "your-subnet-ids"
 
 # import igw
-terraform import module.delete_default_vpc.aws_internet_gateway.default igw-10533e69
+terraform import module.delete_default_vpc.aws_internet_gateway.default "your-igw-id"
 
-#terraform apply -auto-approve
-terraform import module.cloudtrail_logging.aws_kms_key.bucket_key $KMS_KEY
+terraform apply
